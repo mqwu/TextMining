@@ -1,0 +1,1 @@
+Proper descent rate not maintained while on final approach.  A wind gust is a factor in the accident.

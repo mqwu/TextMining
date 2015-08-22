@@ -1,0 +1,1 @@
+an in-flight collision with the ground during a simulated engine failure,  and autorotation, which resulted in the tailboom separating.  A contributing factor in this accident was the pilot allowed the rotor rpm to decay which resulted in inadequate rotor rpm to cushion the helicopter onto the ground.

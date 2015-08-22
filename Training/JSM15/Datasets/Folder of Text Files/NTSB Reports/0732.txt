@@ -1,0 +1,1 @@
+Aircraft control not being maintained by the pilot during the forced landing.  Factors to the accident were the loss of engine power, the overtemperature of the piston, the hole in the top of the number-one piston, and the encountered stall.

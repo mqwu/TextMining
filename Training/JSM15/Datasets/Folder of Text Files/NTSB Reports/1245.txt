@@ -1,0 +1,1 @@
+The local controller clearing the taxiing aircraft to cross the runway in front of the aircraft on takeoff roll.  Contributing factors were the local controller's failure to follow FAA procedures and directives to visually scan the runway prior to issuing the crossing clearance, the local controller’s excessive workload, and the tower supervisor's inadequate supervision.

@@ -1,0 +1,1 @@
+The flight dispatcher failure to provide the flight crew with current in-flight turbulence information that resulted in the in-flight encounter with turbulence during climb.  A factor was the pilots failure to obtain adequate weather information.

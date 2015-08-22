@@ -1,0 +1,1 @@
+Separation of the engine computer wire and connector, which resulted in a partial loss of engine power.

@@ -1,0 +1,1 @@
+The failure of the CFI/check pilot to insure Vmc was maintained during a go-around following a simulated failed engine approach, resulting in an in-flight loss of control, uncontrolled descent, and collision with the terrain. A factor in the accident was the abrupt throttle control by unknown pilot(s).

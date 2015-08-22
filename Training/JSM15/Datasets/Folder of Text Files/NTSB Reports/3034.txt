@@ -1,0 +1,1 @@
+overload failure of the cable between the left rudder pedal and the tail wheel, rendering directional control impossible and resulting in an inadvertent ground loop and nose over. Contributing factors were the crosswind and the soft, wet ground.

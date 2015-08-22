@@ -1,0 +1,154 @@
+#CSV files may be read into R via the command
+#example<-read.csv("C:\\file.csv")
+#Notice the need for the double \\, since \ is a special R character
+#For our example, we will load the file cars.RData, and use the data frame
+#carscsv
+
+#Load the tm library
+library(tm)
+library(Matrix)
+library(irlba)
+library(SnowballC)
+#dtm.to.Matrix converts a sparse DTM to a sparse matrix without
+#creating a dense matrix in the process
+dtm.to.Matrix<- function(dtm){
+    m <- sparseMatrix(i = dtm$i, j = dtm$j, x = dtm$v, dims = c(dtm$nrow, dtm$ncol))
+    rownames(m)<-dtm$dimnames$Docs
+    colnames(m)<-dtm$dimnames$Terms
+    return(m)
+}
+#to install Rstem, open an R session and select Packages > Install packages
+library(Rstem)
+carscsv[1,]
+names(carscsv)
+
+#create a "corpus", a single object which contains all of the reports as #elements
+cars<-Corpus(VectorSource(carscsv$Summary))
+
+#we may inspect the contents of, e.g., the first document of the corpus
+inspect(cars[1])
+
+#remove extra whitespace
+#the tm_map(corpus,function) command simply applies "function" to each
+#document of "corpus"
+cars<-tm_map(cars, stripWhitespace)
+
+#remove punctuation
+cars<-tm_map(cars, removePunctuation)
+
+#convert all characters to lower case
+cars<-tm_map(cars, tolower)
+
+#remove numbers
+cars<-tm_map(cars, removeNumbers)
+
+#remove common "stopwords"
+cars <- tm_map(cars, removeWords, stopwords("english"))
+#stem the document
+cars <- tm_map(cars, stemDocument, "english")
+
+#construct the document term matrix. The rows contain documents and the columns #contain terms
+#we start by considering a matrix with Term Frequency weighting.
+carsdtm<- DocumentTermMatrix(cars,control=list(weighting= weightTf))
+
+#remove terms that are absent from at least 99% of documents
+carsdtm<-removeSparseTerms(carsdtm, 0.99)
+
+#view the first 10x10 block of the document term matrix
+inspect(carsdtm[1:10,1:10])
+
+
+#sort all terms in the document term matrix by frequency
+as.matrix(sort(colSums(as.matrix(carsdtm))))
+
+#remove common words that do not carry much information
+cars<- tm_map(cars, removeWords, c("car","drive","ive"))
+
+#rebild the document term matrix
+carsdtm<- DocumentTermMatrix(cars,control=list(weighting= weightTf))
+carsdtm<- removeSparseTerms(carsdtm, 0.99)
+
+
+findAssocs(carsdtm, "bmw", 0.2)
+
+findAssocs(carsdtm, "lexus", 0.2)
+findAssocs(carsdtm, "carzz", 0.15)
+
+#the wordcloud package offers a nice visualization function
+library(wordcloud)
+
+#print a wordcloud
+v <- colSums(dtm.to.Matrix(carsdtm))
+names(v)<-dimnames(carsdtm)$Terms
+v<-sort(v,decreasing=TRUE)
+color.list <- brewer.pal(8,"Dark2")
+wordcloud(names(v),v,max.words=100,random.order=FALSE,colors=color.list)
+
+svd_plot<-function(DTM){
+#accepts a document term matrix from package tm as input
+#plots first two SVD row and column vectors
+result<-irlba(dtm.to.Matrix(DTM),nu=50,nv=50)
+UD<-result$u[,1:2]%*%diag(result$d[1:2])
+DV<-diag(result$d[1:2])%*%t(result$v[,1:2])
+plot(result$d^2/sum(result$d^2),main="Scree Plot:\n 50 largest singular values",xlab="Component",ylab="Singular Value /% Explained",type="b")
+x11()#new window
+plot(UD,type="n",xlab="",ylab="")
+text(UD, rownames(DTM), cex = 0.6)
+x11()#new window
+plot(t(DV),type="n",xlab="",ylab="")
+text(t(DV), colnames(DTM), cex = 0.6)
+}
+
+
+svd_plot(carsdtm)
+findAssocs(carsdtm, "transmiss", 0.15)
+
+#which rows contain text with the following
+#negative words?
+#the | symbol means "or" (boolean)
+negative<-
+(tm_index(cars, FUN=function(x)any(grep( "fix",x)))|
+tm_index(cars, FUN=function(x)any(grep( "noise",x)))|
+tm_index(cars, FUN=function(x)any(grep( "rattle",x)))|
+tm_index(cars, FUN=function(x)any(grep( "repair",x))))
+
+#table cross tabulates the boolean "negative" variable against the car type
+tab<-table(carscsv$Car.Type,negative)
+cbind(tab,round(tab[,2]/rowSums(tab),2))
+
+
+#for classification
+#this requires quite a bit of R programming
+
+library(rpart)
+library(rpart.plot)
+library(rattle)
+#rattle is only loaded for the fancyRpartPlot function
+#we do not use the rattle GUI here
+
+carsdtm_nobrandinfo<-carsdtm[,!(colnames(carsdtm)%in%c("carzz","bmw","lexus","merced","mercedesbenz"))]
+cars_data<-as.data.frame(as.matrix(carsdtm_nobrandinfo))
+cars_data$Car.Type<-carscsv$Car.Type
+tree<-rpart(Car.Type~.,data=cars_data,method="class",control=list(minsplit=6,cp=.005,maxdepth=6))
+fancyRpartPlot(tree, main="Decision Tree")
+
+#it turns out "clk" and "slk" are specific types of Mercedes. 
+#Let's repeat without them
+carsdtm_nobrand<-carsdtm[,!(colnames(carsdtm)%in%c("carzz","bmw","lexus","merced","mercedesbenz","slk","clk"))]
+cars_data_nobrand<-as.data.frame(as.matrix(carsdtm_nobrand))
+cars_data_nobrand$Car.Type<-carscsv$Car.Type
+tree_nobrand<-rpart(Car.Type~.,data=cars_data_nobrand,method="class",control=list(minsplit=6,cp=.005,maxdepth=4))
+fancyRpartPlot(tree_nobrand, main="Decision Tree")
+
+
+# build a random forest and examine the variable importance plot
+carsdtmidf<- DocumentTermMatrix(cars,control=list(weighting= weightTfIdf))
+carsdtmidf<-as.matrix(carsdtmidf[,!(colnames(carsdtmidf)%in%c("carzz","bmw","lexus","merced","mercedesbenz","slk","clk"))])
+new.data<-as.data.frame(cbind(carscsv$Car.Type,carsdtmidf))
+names(new.data)[1]<-"Car.Type"
+new.data$Car.Type<-as.factor(new.data$Car.Type)
+library(randomForest)
+#this next line takes a few minutes to run
+varImpPlot(rf<-randomForest(new.data[,-1],new.data[,1],sampsize=c(118,118,118,118),ntree=20, replace=FALSE,importance=TRUE))
+
+                                                                                                                      

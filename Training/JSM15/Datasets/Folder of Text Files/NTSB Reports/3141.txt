@@ -1,0 +1,1 @@
+Aircraft control not maintained during takeoff.  Factors include soft/muddy terrain.

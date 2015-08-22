@@ -1,0 +1,1 @@
+Aircraft control not being maintained by the pilot which resulted in the encountered settling with power flight condition during the initial climb.  Factors to the accident were the reported variable winds during the takeoff and the corn crop.

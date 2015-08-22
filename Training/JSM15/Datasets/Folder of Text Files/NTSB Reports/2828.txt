@@ -1,0 +1,1 @@
+Fuel starvation resulting in a loss of engine power during the aircraft's initial climb.  A disconnected fuel line was a factor.

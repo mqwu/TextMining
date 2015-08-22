@@ -1,0 +1,1 @@
+Aircraft control was not maintained during a hovering turn.  High wind conditions and excessive remedial action were factors.

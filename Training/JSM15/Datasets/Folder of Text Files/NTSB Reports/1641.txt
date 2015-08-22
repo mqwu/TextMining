@@ -1,0 +1,1 @@
+improper rigging of the rotary variable differential transformer by the manufacturer, resulting in incorrect fuel scheduling to the fuel control unit.

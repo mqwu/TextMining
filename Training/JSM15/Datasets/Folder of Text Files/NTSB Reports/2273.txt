@@ -1,0 +1,1 @@
+The reverse installation of the RPM compensator assembly control box bolts resulting in the threaded end of the bolt impinging on a clevis and jamming the collective during climb. A contributing factor was the lack of adequate documentation provided by the technical order instruction for installation of the compensator.

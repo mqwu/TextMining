@@ -1,0 +1,1 @@
+An in-flight collision with terrain for undetermined reasons.

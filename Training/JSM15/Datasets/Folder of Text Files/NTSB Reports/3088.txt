@@ -1,0 +1,1 @@
+The pilot's delay in aborting the takeoff.  A factor was the soft runway.

@@ -1,0 +1,1 @@
+The pilot's improper use of cyclic while attempting a hover resulting in dynamic rollover.

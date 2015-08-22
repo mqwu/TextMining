@@ -1,0 +1,1 @@
+Directional control not obtained/maintained during the aborted takeoff.

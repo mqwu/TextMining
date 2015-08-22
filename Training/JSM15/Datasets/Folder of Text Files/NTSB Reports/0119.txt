@@ -1,0 +1,1 @@
+The manufacturer's inadequate collective lock design, which resulted in the collective unlocking during a preflight check and subsequent unintentional liftoff and loss of helicopter control.  The pilot's loss of control was due in part to the unavailability of the hydraulic system.

@@ -1,0 +1,1 @@
+Terrain clearance was not maintained during cruise flight.  Dark night and mountainous terrain were factors.

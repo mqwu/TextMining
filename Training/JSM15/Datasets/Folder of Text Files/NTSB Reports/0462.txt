@@ -1,0 +1,1 @@
+the reverse rigging of the aileron flight control system resulting in aileron deflections opposite that of the pilot's inputs which lead to an uncontrolled descent into the terrain. Factors include the pilot's failure to detect the misrigged ailerons during his pre-takeoff flight control check.

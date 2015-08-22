@@ -1,0 +1,1 @@
+Fuel exhaustion due to the pilot's failure to perform fuel calculations.  A factor was the inboard fuel tank probes not being within the manufacturer's resistance limits, which resulted in inaccurate fuel gauges.

@@ -1,0 +1,1 @@
+Aircraft control not maintained by pilot during landing.
